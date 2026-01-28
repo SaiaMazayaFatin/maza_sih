@@ -1,116 +1,94 @@
-import { ReactNode, useState, useRef, useEffect } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
-interface WindowProps {
+interface OmoriWindowProps {
   title: string
-  isOpen: boolean
   onClose: () => void
-  onFocus: () => void
-  zIndex: number
-  defaultOffset?: { x: number; y: number }
   children: ReactNode
 }
 
-const Window = ({ title, isOpen, onClose, onFocus, zIndex, defaultOffset = { x: 0, y: 0 }, children }: WindowProps) => {
-  const [position, setPosition] = useState(defaultOffset)
-  const [isDragging, setIsDragging] = useState(false)
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
-  const [hasBeenOpened, setHasBeenOpened] = useState(false)
-  const windowRef = useRef<HTMLDivElement>(null)
+const OmoriWindow = ({ title, onClose, children }: OmoriWindowProps) => {
+  const [isVisible, setIsVisible] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
 
-  // Only set default position on first open, not on subsequent opens
   useEffect(() => {
-    if (isOpen && !hasBeenOpened) {
-      setPosition(defaultOffset)
-      setHasBeenOpened(true)
-    }
-  }, [isOpen, hasBeenOpened, defaultOffset])
+    // Animate in
+    setTimeout(() => setIsVisible(true), 50)
+  }, [])
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (windowRef.current) {
-      setIsDragging(true)
-      setDragOffset({
-        x: e.clientX - position.x,
-        y: e.clientY - position.y,
-      })
-      onFocus()
-    }
+  const handleClose = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      onClose()
+    }, 300)
   }
 
-  const handleWindowClick = () => {
-    onFocus()
-  }
-
-  // Global mouse move and up handlers for smooth dragging
+  // Handle escape key
   useEffect(() => {
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      if (isDragging) {
-        setPosition({
-          x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y,
-        })
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose()
       }
     }
-
-    const handleGlobalMouseUp = () => {
-      setIsDragging(false)
-    }
-
-    if (isDragging) {
-      window.addEventListener('mousemove', handleGlobalMouseMove)
-      window.addEventListener('mouseup', handleGlobalMouseUp)
-      return () => {
-        window.removeEventListener('mousemove', handleGlobalMouseMove)
-        window.removeEventListener('mouseup', handleGlobalMouseUp)
-      }
-    }
-  }, [isDragging, dragOffset])
-
-  if (!isOpen) return null
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   return (
-    <div 
-      ref={windowRef}
-      className="fixed bg-white rounded-2xl shadow-2xl w-[85%] sm:w-[400px] md:w-[450px] max-h-[60vh] overflow-hidden"
-      style={{
-        left: '50%',
-        top: '50%',
-        transform: `translate(calc(-50% + ${position.x}px), calc(-50% + ${position.y}px))`,
-        cursor: isDragging ? 'grabbing' : 'default',
-        zIndex: zIndex,
-      }}
-      onMouseDown={handleWindowClick}
-    >
-      {/* Window Title Bar - Draggable */}
-      <div 
-        className="bg-gray-700 px-4 py-2 flex items-center justify-between rounded-t-2xl select-none"
-        onMouseDown={handleMouseDown}
-        style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div
+        className={`absolute inset-0 bg-black/80 transition-opacity duration-300 ${
+          isVisible && !isClosing ? 'opacity-100' : 'opacity-0'
+        }`}
+        onClick={handleClose}
+      />
+
+      {/* Window */}
+      <div
+        className={`relative w-[90%] max-w-2xl max-h-[80vh] bg-black border-2 border-white/80 
+          transition-all duration-300 ${
+            isVisible && !isClosing
+              ? 'opacity-100 scale-100 translate-y-0'
+              : 'opacity-0 scale-95 translate-y-4'
+          }`}
       >
-        <span className="text-white font-medium text-sm">{title}</span>
-        <button
-          onClick={onClose}
-          onMouseDown={(e) => e.stopPropagation()}
-          className="w-5 h-5 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center transition-colors group"
-          aria-label="Close window"
-        >
-          <svg
-            className="w-2.5 h-2.5 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="3"
+        {/* Corner decorations */}
+        <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-red-500" />
+        <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-red-500" />
+        <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-red-500" />
+        <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-red-500" />
+
+        {/* Title bar */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-white/30">
+          <div className="flex items-center gap-3">
+            <span className="text-red-500">■</span>
+            <h2 className="text-xl sm:text-2xl tracking-[0.2em] text-white">{title}</h2>
+          </div>
+          <button
+            onClick={handleClose}
+            className="text-white/60 hover:text-red-500 transition-colors text-2xl leading-none"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+            ✕
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 overflow-y-auto max-h-[calc(80vh-60px)] text-white/90">
+          {children}
+        </div>
+
+        {/* Bottom decoration */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent" />
       </div>
 
-      {/* Window Content */}
-      <div className="p-4 overflow-y-auto max-h-[calc(60vh-44px)] text-sm">
-        {children}
+      {/* Instruction */}
+      <div className={`absolute bottom-8 text-white/40 text-sm tracking-wider transition-opacity duration-300 ${
+        isVisible && !isClosing ? 'opacity-100' : 'opacity-0'
+      }`}>
+        Press ESC or click outside to close
       </div>
     </div>
   )
 }
 
-export default Window
+export default OmoriWindow

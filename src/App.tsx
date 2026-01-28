@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import OmoriMenu from './components/OmoriMenu'
-import OmoriWindow from './components/OmoriWindow'
+import Menu from './components/Menu'
+import Window from './components/Window'
 import {
   AboutContent,
   ProjectsContent,
@@ -93,7 +93,7 @@ function App() {
             MAZA
           </h1>
           <p className="text-white/60 text-xl sm:text-2xl tracking-[0.3em] mb-12">
-            CREATIVE DEVELOPER
+            LETS BUILD SOMETHING AWESOME TOGETHER
           </p>
 
           {/* Decorative line under title */}
@@ -105,7 +105,7 @@ function App() {
         </div>
 
         {/* Menu */}
-        <OmoriMenu onSelect={openWindow} />
+        <Menu onSelect={openWindow} />
 
         {/* Blinking cursor at bottom */}
         <div className="absolute bottom-[-100px] left-1/2 -translate-x-1/2">
@@ -133,12 +133,12 @@ function App() {
 
       {/* Window */}
       {windowData && (
-        <OmoriWindow
+        <Window
           title={windowData.title}
           onClose={closeWindow}
         >
           {windowData.content}
-        </OmoriWindow>
+        </Window>
       )}
     </div>
   )

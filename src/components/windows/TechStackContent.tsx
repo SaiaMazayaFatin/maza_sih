@@ -1,54 +1,111 @@
 const TechStackContent = () => {
   const techCategories = [
     {
-      category: 'FRONTEND',
+      category: 'MACHINE LEARNING & DEEP LEARNING',
       items: [
-        { name: 'React', level: 90 },
-        { name: 'TypeScript', level: 85 },
-        { name: 'Tailwind CSS', level: 90 },
-        { name: 'Next.js', level: 75 },
+        { name: 'PyTorch', url: 'https://pytorch.org/' },
+        { name: 'TensorFlow', url: 'https://www.tensorflow.org/' },
+        { name: 'Scikit-learn', url: 'https://scikit-learn.org/' },
+        { name: 'Hugging Face Transformers', url: 'https://huggingface.co/transformers/' },
       ],
     },
     {
-      category: 'DESIGN & ART',
+      category: 'LLM & NLP SYSTEMS',
       items: [
-        { name: 'Figma', level: 85 },
-        { name: 'Photoshop', level: 80 },
-        { name: 'Illustrator', level: 85 },
-        { name: 'After Effects', level: 70 },
+        { name: 'LangChain', url: 'https://www.langchain.com/' },
+        { name: 'LangGraph', url: 'https://langchain-ai.github.io/langgraph/' },
+        { name: 'LlamaIndex', url: 'https://www.llamaindex.ai/' },
+        { name: 'Hugging Face Ecosystem', url: 'https://huggingface.co/' },
       ],
     },
     {
-      category: 'OTHER',
+      category: 'DATA PROCESSING & PIPELINES',
       items: [
-        { name: 'Git', level: 80 },
-        { name: 'Node.js', level: 70 },
-        { name: 'Python', level: 65 },
+        { name: 'NumPy', url: 'https://numpy.org/' },
+        { name: 'Pandas', url: 'https://pandas.pydata.org/' },
+        { name: 'Prefect', url: 'https://www.prefect.io/' },
+      ],
+    },
+    {
+      category: 'MLOPS & DEPLOYMENT',
+      items: [
+        { name: 'Docker', url: 'https://www.docker.com/' },
+        { name: 'MLflow', url: 'https://mlflow.org/' },
+        { name: 'Kubernetes', url: 'https://kubernetes.io/' },
+        { name: 'TorchServe', url: 'https://pytorch.org/serve/' },
+        { name: 'GitHub Actions', url: 'https://github.com/features/actions' },
+      ],
+    },
+    {
+      category: 'VECTOR DATABASES',
+      items: [
+        { name: 'FAISS', url: 'https://faiss.ai/' },
+        { name: 'Qdrant', url: 'https://qdrant.tech/' },
+      ],
+    },
+    {
+      category: 'RELATIONAL & GRAPH DATABASES',
+      items: [
+        { name: 'PostgreSQL', url: 'https://www.postgresql.org/' },
+        { name: 'MySQL', url: 'https://www.mysql.com/' },
+        { name: 'Neo4j', url: 'https://neo4j.com/' },
+      ],
+    },
+    {
+      category: 'CLOUD & INFRASTRUCTURE',
+      items: [
+        { name: 'AWS', url: 'https://aws.amazon.com/' },
+        { name: 'Google Cloud Platform', url: 'https://cloud.google.com/' },
+      ],
+    },
+    {
+      category: 'PROGRAMMING LANGUAGES',
+      items: [
+        { name: 'Python', url: 'https://www.python.org/' },
+        { name: 'JavaScript', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
+        { name: 'TypeScript', url: 'https://www.typescriptlang.org/' },
+        { name: 'Go', url: 'https://go.dev/' },
+        { name: 'C++', url: 'https://isocpp.org/' },
+      ],
+    },
+    {
+      category: 'COMPUTER VISION',
+      items: [
+        { name: 'OpenCV', url: 'https://opencv.org/' },
+        { name: 'Torchvision', url: 'https://pytorch.org/vision/' },
+        { name: 'timm', url: 'https://huggingface.co/docs/timm/' },
+        { name: 'Detectron2', url: 'https://github.com/facebookresearch/detectron2' },
+        { name: 'Ultralytics YOLO', url: 'https://ultralytics.com/' },
+      ],
+    },
+    {
+      category: 'BACKEND',
+      items: [
+        { name: 'Fiber', url: 'https://gofiber.io/' },
+        { name: 'Hapi', url: 'https://hapi.dev/' },
+        { name: 'Express', url: 'https://expressjs.com/' },
       ],
     },
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <p className="text-white/60 text-lg">// technologies & tools</p>
 
       {techCategories.map((category) => (
         <div key={category.category}>
-          <h3 className="text-red-500 text-sm tracking-widest mb-3">■ {category.category}</h3>
-          <div className="space-y-3">
+          <h3 className="text-red-500 text-sm tracking-widest mb-2">■ {category.category}</h3>
+          <div className="flex flex-wrap gap-2">
             {category.items.map((item) => (
-              <div key={item.name} className="group">
-                <div className="flex justify-between mb-1">
-                  <span className="text-white/80 tracking-wider">{item.name}</span>
-                  <span className="text-white/40">[{item.level}%]</span>
-                </div>
-                <div className="w-full bg-white/10 h-1">
-                  <div
-                    className="bg-red-500 h-1 transition-all duration-500 group-hover:bg-white"
-                    style={{ width: `${item.level}%` }}
-                  />
-                </div>
-              </div>
+              <a
+                key={item.name}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1 border border-white/30 text-white/80 text-sm hover:border-red-500 hover:text-red-500 transition-colors"
+              >
+                {item.name} ↗
+              </a>
             ))}
           </div>
         </div>

@@ -2,11 +2,11 @@ import { useState } from 'react'
 
 type WindowType = 'about' | 'projects' | 'skills' | 'journey' | 'contact'
 
-interface OmoriMenuProps {
+interface MenuProps {
   onSelect: (type: WindowType) => void
 }
 
-const OmoriMenu = ({ onSelect }: OmoriMenuProps) => {
+const Menu = ({ onSelect }: MenuProps) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
 
   const menuItems: { key: WindowType; label: string; description: string }[] = [
@@ -73,4 +73,4 @@ const OmoriMenu = ({ onSelect }: OmoriMenuProps) => {
   )
 }
 
-export default OmoriMenu
+export default Menu
