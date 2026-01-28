@@ -99,7 +99,7 @@ function App() {
             MAZA
           </h1>
           <p className="text-white/60 text-xl sm:text-2xl tracking-[0.3em] mb-12">
-            CREATIVE DEVELOPER
+            LETS BUILD THE FUTURE TOGETHER
           </p>
 
           {/* Decorative line under title */}
