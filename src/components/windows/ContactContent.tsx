@@ -1,4 +1,6 @@
-import { useState, FormEvent } from 'react'
+import { useState } from 'react'
+import type { FormEvent } from 'react'
+
 
 const ContactContent = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +15,7 @@ const ContactContent = () => {
     e.preventDefault()
 
     const data = {
-      access_key: '893e7876-6fe9-424e-9cca-bb4e67fe90c2',
+      access_key: '893e7876-6fe9-424e-9cca-bb4e67fe90c2`',
       name: formData.name,
       email: formData.email,
       message: formData.message,
