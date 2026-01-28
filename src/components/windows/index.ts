@@ -1,0 +1,5 @@
+export { default as AboutContent } from './AboutContent'
+export { default as ProjectsContent } from './ProjectsContent'
+export { default as TechStackContent } from './TechStackContent'
+export { default as JourneyContent } from './JourneyContent'
+export { default as ContactContent } from './ContactContent'
