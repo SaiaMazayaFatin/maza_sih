@@ -15,6 +15,7 @@ function App() {
   const [activeWindow, setActiveWindow] = useState<WindowType>(null)
   const [showTitle, setShowTitle] = useState(false)
   const [floatingElements, setFloatingElements] = useState<{ id: number; x: number; y: number; delay: number }[]>([])
+  const [windowZIndex, setWindowZIndex] = useState(1000)
 
   useEffect(() => {
     // Animate title on load
@@ -32,10 +33,15 @@ function App() {
 
   const openWindow = (type: WindowType) => {
     setActiveWindow(type)
+    setWindowZIndex(prev => prev + 1)
   }
 
   const closeWindow = () => {
     setActiveWindow(null)
+  }
+
+  const handleWindowFocus = () => {
+    setWindowZIndex(prev => prev + 1)
   }
 
   const getWindowContent = () => {
@@ -93,7 +99,7 @@ function App() {
             MAZA
           </h1>
           <p className="text-white/60 text-xl sm:text-2xl tracking-[0.3em] mb-12">
-            LETS BUILD SOMETHING AWESOME TOGETHER
+            CREATIVE DEVELOPER
           </p>
 
           {/* Decorative line under title */}
@@ -135,7 +141,10 @@ function App() {
       {windowData && (
         <Window
           title={windowData.title}
+          isOpen={activeWindow !== null}
           onClose={closeWindow}
+          onFocus={handleWindowFocus}
+          zIndex={windowZIndex}
         >
           {windowData.content}
         </Window>

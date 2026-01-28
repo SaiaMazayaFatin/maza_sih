@@ -3,32 +3,22 @@ import type { ReactNode } from 'react'
 
 interface WindowProps {
   title: string
+  isOpen: boolean
   onClose: () => void
-  children: ReactNode
-
-  // optional props
-  isOpen?: boolean
-  onFocus?: () => void
-  zIndex?: number
+  onFocus: () => void
+  zIndex: number
   defaultOffset?: { x: number; y: number }
+  children: ReactNode
 }
 
-const Window = ({
-  title,
-  onClose,
-  children,
-  isOpen = true,
-  onFocus = () => {},
-  zIndex = 50,
-  defaultOffset = { x: 0, y: 0 },
-}: WindowProps) => {
+const Window = ({ title, isOpen, onClose, onFocus, zIndex, defaultOffset = { x: 0, y: 0 }, children }: WindowProps) => {
   const [position, setPosition] = useState(defaultOffset)
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [hasBeenOpened, setHasBeenOpened] = useState(false)
   const windowRef = useRef<HTMLDivElement>(null)
 
-  // set default position only once
+  // Only set default position on first open, not on subsequent opens
   useEffect(() => {
     if (isOpen && !hasBeenOpened) {
       setPosition(defaultOffset)
@@ -37,60 +27,62 @@ const Window = ({
   }, [isOpen, hasBeenOpened, defaultOffset])
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (!windowRef.current) return
-
-    setIsDragging(true)
-    setDragOffset({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y,
-    })
-    onFocus()
+    if (windowRef.current) {
+      setIsDragging(true)
+      setDragOffset({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y,
+      })
+      onFocus()
+    }
   }
 
   const handleWindowClick = () => {
     onFocus()
   }
 
-  // global mouse listeners (smooth drag)
+  // Global mouse move and up handlers for smooth dragging
   useEffect(() => {
-    const handleMove = (e: MouseEvent) => {
-      if (!isDragging) return
-      setPosition({
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y,
-      })
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (isDragging) {
+        setPosition({
+          x: e.clientX - dragOffset.x,
+          y: e.clientY - dragOffset.y,
+        })
+      }
     }
 
-    const handleUp = () => setIsDragging(false)
+    const handleGlobalMouseUp = () => {
+      setIsDragging(false)
+    }
 
     if (isDragging) {
-      window.addEventListener('mousemove', handleMove)
-      window.addEventListener('mouseup', handleUp)
-    }
-
-    return () => {
-      window.removeEventListener('mousemove', handleMove)
-      window.removeEventListener('mouseup', handleUp)
+      window.addEventListener('mousemove', handleGlobalMouseMove)
+      window.addEventListener('mouseup', handleGlobalMouseUp)
+      return () => {
+        window.removeEventListener('mousemove', handleGlobalMouseMove)
+        window.removeEventListener('mouseup', handleGlobalMouseUp)
+      }
     }
   }, [isDragging, dragOffset])
 
   if (!isOpen) return null
 
   return (
-    <div
+    <div 
       ref={windowRef}
-      className="fixed bg-white rounded-2xl shadow-2xl w-[85%] sm:w-[400px] md:w-[450px] max-h-[60vh] overflow-hidden"
+      className="fixed bg-black rounded-2xl shadow-2xl w-[85%] sm:w-[400px] md:w-[450px] max-h-[60vh] overflow-hidden"
       style={{
         left: '50%',
         top: '50%',
         transform: `translate(calc(-50% + ${position.x}px), calc(-50% + ${position.y}px))`,
         cursor: isDragging ? 'grabbing' : 'default',
-        zIndex,
+        zIndex: zIndex,
       }}
       onMouseDown={handleWindowClick}
     >
-      {/* Title Bar */}
-      <div
+      {/* Window Title Bar - Draggable */}
+      <div 
         className="bg-gray-700 px-4 py-2 flex items-center justify-between rounded-t-2xl select-none"
         onMouseDown={handleMouseDown}
         style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
@@ -114,8 +106,8 @@ const Window = ({
         </button>
       </div>
 
-      {/* Content */}
-      <div className="p-4 overflow-y-auto max-h-[calc(60vh-44px)] text-sm">
+      {/* Window Content */}
+      <div className="p-4 overflow-y-auto max-h-[calc(60vh-44px)] text-sm text-white">
         {children}
       </div>
     </div>
