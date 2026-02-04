@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Menu from './components/Menu'
 import Window from './components/Window'
+import InteractiveParticles from './components/InteractiveParticles'
 import {
   AboutContent,
   ProjectsContent,
@@ -65,6 +66,9 @@ function App() {
 
   return (
     <div className="h-screen bg-black relative overflow-hidden flex flex-col items-center justify-center">
+      {/* Interactive Particles Background */}
+      <InteractiveParticles />
+      
       {/* Noise overlay */}
       <div className="noise-overlay" />
 
@@ -130,7 +134,7 @@ function App() {
       </div>
       <div className="absolute bottom-8 left-8 text-white/20">
         <div className="w-8 h-px bg-white/20 mb-2" />
-        <div className="text-xs tracking-widest">2024</div>
+        <div className="text-xs tracking-widest">2026</div>
       </div>
       <div className="absolute bottom-8 right-8 text-white/20">
         <div className="w-8 h-px bg-white/20 mb-2 ml-auto" />
