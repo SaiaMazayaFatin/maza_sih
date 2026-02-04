@@ -18,35 +18,35 @@ const Menu = ({ onSelect }: MenuProps) => {
   ]
 
   return (
-    <nav className="flex flex-col items-center gap-2">
+    <nav className="flex flex-col items-center gap-2 relative">
       {menuItems.map((item, index) => (
         <button
           key={item.key}
           onClick={() => onSelect(item.key)}
           onMouseEnter={() => setHoveredItem(item.key)}
           onMouseLeave={() => setHoveredItem(null)}
-          className="group relative px-8 py-3 text-white/80 hover:text-red-500 transition-all duration-200"
+          className="group relative text-white/80 hover:text-red-500 transition-all duration-200"
           style={{ animationDelay: `${index * 100}ms` }}
         >
-          <div className="flex items-center gap-4">
-            {/* Selection indicator */}
+          <div className="flex items-center justify-center relative">
+            {/* Selection indicator - absolute positioned */}
             <span
-              className={`text-red-500 transition-all duration-200 ${
-                hoveredItem === item.key ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'
+              className={`absolute -left-8 text-red-500 transition-all duration-200 ${
+                hoveredItem === item.key ? 'opacity-100' : 'opacity-0'
               }`}
             >
               ▶
             </span>
 
-            {/* Menu text */}
-            <span className="text-2xl sm:text-3xl tracking-[0.2em] font-bold">
+            {/* Menu text - always centered */}
+            <span className="text-2xl sm:text-3xl tracking-[0.2em] font-bold whitespace-nowrap px-3 py-3">
               {item.label}
             </span>
 
-            {/* Description */}
+            {/* Description - absolute positioned */}
             <span
-              className={`text-sm text-white/40 tracking-wider transition-all duration-200 ${
-                hoveredItem === item.key ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2'
+              className={`absolute left-full ml-4 text-sm text-white/40 tracking-wider transition-all duration-200 whitespace-nowrap ${
+                hoveredItem === item.key ? 'opacity-100' : 'opacity-0'
               }`}
             >
               — {item.description}
@@ -55,7 +55,7 @@ const Menu = ({ onSelect }: MenuProps) => {
 
           {/* Underline effect */}
           <div
-            className={`absolute bottom-2 left-12 h-px bg-red-500 transition-all duration-300 ${
+            className={`absolute bottom-2 left-1/2 -translate-x-1/2 h-px bg-red-500 transition-all duration-300 ${
               hoveredItem === item.key ? 'w-20' : 'w-0'
             }`}
           />

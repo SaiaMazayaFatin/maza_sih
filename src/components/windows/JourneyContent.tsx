@@ -5,6 +5,14 @@ const JourneyContent = () => {
 
   const timeline = [
     {
+      period: 'Feb 2026 - Present',
+      title: 'AI Engineer (Internship)',
+      company: 'Kalbe Farma',
+      location: 'Jakarta Pusat, Indonesia · Remote',
+      description: 'Working as an AI Engineer intern developing and implementing AI solutions for pharmaceutical applications.',
+      details: null,
+    },
+    {
       period: 'Sep 2025 - Jan 2026',
       title: 'Backend Developer (Internship)',
       company: 'Sekolah Tinggi Teknologi Wastukancana',
